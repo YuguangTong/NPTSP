@@ -1,49 +1,26 @@
-import numpy as np
-from random import randint
-from copy import copy
+from nngraph import Graph
 
-class Graph(object):
-    """
-    Graph representing cities.
-    """
-    # assume distMatr is a 2d python list
-    def __init__(self, distMatr, colorList):
-        self._distMatr = distMatr
-        self._colorList = colorList 
-        self._numCity = len(colorList)
-        self._rSet = set()
-        self._bSet = set()
-        for c in range(self._size):
-            if colorList[c] == 'R':
-                self._rSet.add(c)
-            else:
-                self._bSet.add(c)
+T = 1
+fout = open("answer.out", "w")
+for t in range(1, T + 1):
+    fin = open(str(t) + ".in", "r")
+    numCity = int(fin.readline())
+    distMatr = [[] for i in range(numCity)]
+    for i in range(numCity):
+        distMatr[i] = [int(x) for x in fin.readline().split()]
+    colorList = fin.read()
+    print(numCity)
+    print(colorList, "distrance matrix:")
+    print(distMatr)
 
-    def tour_cost(self, tour):
-        assert len(tour) = self.numCity - 1
-        cost = 0
-        for i in range(self.numCity - 1):
-            cost += self.distMatr[tour[i]][tour[i+1]]
-        return cost
+
+    g = Graph(distMatr, colorList, numCity)
     
-    # class method to remove a red(blue) CITY from RSET (BSET)
-    def remove_city(rset, bset, city, color):
-        if color = 'R':
-            rset.remove(city)
-        else:
-            bset.remove(city)
-        return
-    
-    def opposite_color(color):
-        if color == 'R':
-            return 'B'
-        return 'R'
-
-    # return a nearest neighbor tour starting from START
-    def nn_tour(self, start = 0):
-        unvistRed, unvistBlue = copy(self._rSet), copy(self._bSet)
-        tour = [start]
-        Graph.remove_city(unvistRed, unvistBlue, first, self._colorList[start])
-        while unvistRed or unvistBlue:
-            
-
+    assign = [0] * numCity
+    tour = g.nn_best[1]
+    for i in tour:
+        assign[i] = tour[i] + 1
+    fout.write("%s\n"% " ".join(map(str, assign)))
+    print(assign)
+    print("tour cost is", g.tour_cost(tour))
+fout.close()
