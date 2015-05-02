@@ -56,7 +56,7 @@ class Ant(Thread):
             self.curr_node = new_node
 
         # don't forget to close the tour
-        self.path_cost += graph.delta(self.path_vec[-1], self.path_vec[0])
+#        self.path_cost += graph.delta(self.path_vec[-1], self.path_vec[0])
 
         # send our results to the colony
         self.colony.update(self)
@@ -84,7 +84,7 @@ class Ant(Thread):
                     raise Exception("tau = 0")
 
                 val = graph.tau(curr_node, node) * math.pow(graph.etha(curr_node, node), self.Beta)
-                if val > max_val and self.color[curr_node - 1] is not self.color[node - 1] or max_node == -1:
+                if val > max_val and self.color[curr_node] is not self.color[node] or max_node == -1:
                     max_val = val
                     max_node = node
         else:
@@ -105,7 +105,7 @@ class Ant(Thread):
 
             for node in self.nodes_to_visit.values():
                 p = graph.tau(curr_node, node) * math.pow(graph.etha(curr_node, node), self.Beta) 
-                if p > avg and self.color[curr_node - 1] is not self.color[node - 1] or max_node == -1:
+                if p > avg and self.color[curr_node] is not self.color[node] or max_node == -1:
 #                    print "p = %s" % (p,)
                     max_node = node
 

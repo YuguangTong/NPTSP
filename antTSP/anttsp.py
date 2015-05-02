@@ -45,6 +45,9 @@ if __name__ == "__main__":
                 best_path_vec = ant_colony.best_path_vec
                 best_path_cost = ant_colony.best_path_cost
 
+
+        best_path_vec = [x+1 for x in best_path_vec]
+
         print "\n------------------------------------------------------------"
         print "                     Results                                "
         print "------------------------------------------------------------"
