@@ -5,7 +5,8 @@ import os
 # if you have errors, make sure you double check the output format 
   
 def main(argv):
-  fanswer = open("answer.out", "r")
+
+  fanswer = open(os.path.expanduser(answer_dir) + "answer.out", "r")
   fout = open("score.txt", "w")
   for i in xrange(ninstances):
     finstance = open(os.path.expanduser(input_dir) + `i+1`+".in", "r")
@@ -53,18 +54,25 @@ def processCase(N, d, c, perm):
 
   return str(cost)
 
-ninstances = 495 # default                                                      
+ninstances = 495 # default                                                     
+answer_dir = "./"
 
 if __name__ == '__main__':
-  if len(sys.argv) == 3:
+  if len(sys.argv) >= 3:
     if not os.path.exists(sys.argv[1]):
-      print sys.argv[1], "is not a valid path"
+      print sys.argv[1], "is not a valid path for instances"
     ninstances = int(sys.argv[2])
     input_dir = sys.argv[1]
     if ninstances < 1 or ninstances > 495:
       print "file number should be between 1 and 495 inclusive"
+      sys.exit(1)
+    if len(sys.argv) == 4:
+      answer_dir =  sys.argv[3]
+      if not os.path.exists(answer_dir):
+        print sys.argv[3], "is not a valid path for answers.out"
+        sys.exit(1)
   else:
     print("usage: python scorer_multiple.py [path_of_instance_dir] [num_of_inpu\
-t_files]")
+t_files] (optional)[answer_dir]")
     sys.exit(1)
   main(sys.argv[1:])
