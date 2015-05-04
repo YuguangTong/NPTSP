@@ -9,7 +9,7 @@ if __name__ == "__main__":
         T = int(sys.argv[2])
         input_dir = sys.argv[1]
     else:
-        print("usage: python test.py [path_of_input_folder] [num_of_input_files]")
+        print("usage: python run.py [path_of_input_folder] [num_of_input_files]")
         sys.exit(1)
     # assume that input is in directory e.g. ./testin/
     # output answer to ./anwswer.out
