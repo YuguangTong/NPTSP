@@ -13,7 +13,7 @@ if __name__ == "__main__":
         num_nodes = int(sys.argv[1])
 
     num_ants = 30
-    num_iterations = 2
+    num_iterations = 10
     num_repetitions = 1
 
     T = 1

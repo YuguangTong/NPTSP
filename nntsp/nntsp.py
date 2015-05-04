@@ -1,6 +1,6 @@
-from nngraph import Graph
+from nngraph import nnGraph
 
-# python3 script
+# python2 script
 # input: 1.in, 2.in etc
 # output: answer.out
 T = 1
@@ -12,18 +12,19 @@ for t in range(1, T + 1):
     for i in range(numCity):
         distMatr[i] = [int(x) for x in fin.readline().split()]
     colorList = fin.read()
-    print(numCity)
-    print(colorList, "distrance matrix:")
-    print(distMatr)
+    fin.close()
+    print numCity
+    print colorList, "distrance matrix:"
+    print distMatr
 
 
-    g = Graph(distMatr, colorList, numCity)
+    g = nnGraph(distMatr, colorList, numCity)
     
     assign = [0] * numCity
-    tour = g.nn_best[1]
+    tour = g.nn_best()[0]
     for i in tour:
         assign[i] = tour[i] + 1
     fout.write("%s\n"% " ".join(map(str, assign)))
-    print(assign)
-    print("tour cost is", g.tour_cost(tour))
+    print assign
+    print "tour cost is", g.tour_cost(tour)
 fout.close()
