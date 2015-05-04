@@ -1,0 +1,6 @@
+nnstp is a python2 package to solve NPTSP using nearest neighbor algorihtm.
+
+The only source file is "nntsp/nngraph.py".
+You can delete other files (apart from "__init__.py") to maintain package structure.
+
+"test.py" contain some example on how to use nntsp package.
