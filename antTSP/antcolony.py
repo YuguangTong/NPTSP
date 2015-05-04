@@ -24,21 +24,21 @@ class AntColony:
         self.last_best_path_iteration = 0
 
     def start(self, color):
-        print "HANG HRERERE?"
+#        print "HANG HRERERE?"
 
         self.ants = self.create_ants(color)
         self.iter_counter = 0
 
-        print "BEFORE WHILE"
+#        print "BEFORE WHILE"
         while self.iter_counter < self.num_iterations:
-            print "WHILE WAITING FOR LOCKS"
+#            print "WHILE WAITING FOR LOCKS"
             self.iteration()
 
             self.cv.acquire()
             # wait until update calls notify()
-            print "THIS WAIT?"
+#            print "THIS WAIT?"
             self.cv.wait()
-            print "AHHH. THIS?"
+#            print "AHHH. THIS?"
 
             lock = self.graph.lock
             lock.acquire()
@@ -47,7 +47,7 @@ class AntColony:
 
             self.cv.release()
 
-        print "DONE WITH START"
+#        print "DONE WITH START"
     # one iteration involves spawning a number of ant threads
     def iteration(self):
         self.avg_path_cost = 0
@@ -56,9 +56,9 @@ class AntColony:
 #        print "iter_counter = %s" % (self.iter_counter,)
         for ant in self.ants:
 #            print "starting ant = %s" % (ant.ID)
-            print "ANT START"
+#            print "ANT START"
             ant.start()
-            print "ANT START ENDED"
+#            print "ANT START ENDED"
 
     def num_ants(self):
         return len(self.ants)
@@ -76,7 +76,7 @@ class AntColony:
 
         #outfile = open("results.dat", "a")
 
-        print "Update called by %s" % (ant.ID,)
+#        print "Update called by %s" % (ant.ID,)
         self.ant_counter += 1
 
         self.avg_path_cost += ant.path_cost
@@ -106,9 +106,9 @@ class AntColony:
         self.reset()
         ants = []
         for i in range(0, self.num_ants):
-            print "HANG6"
+#            print "HANG6"
             ant = Ant(i, random.randint(0, self.graph.num_nodes - 1), self, color)
-            print "HANG4"
+#            print "HANG4"
             ants.append(ant)
         
         return ants

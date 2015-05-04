@@ -9,8 +9,8 @@ import traceback
 if __name__ == "__main__":   
 
 
-    num_ants = 2
-    num_iterations = 2
+    num_ants = 5
+    num_iterations = 200
     num_repetitions = 1
 
     T = 1 # number of test cases
@@ -39,10 +39,10 @@ if __name__ == "__main__":
             for i in range(0, num_repetitions):
                 graph.reset_tau()
                 ant_colony = AntColony(graph, num_ants, num_iterations, c)
-                print "HANG AFTER ANYCOLONY"
+#                print "HANG AFTER ANYCOLONY"
 
                 ant_colony.start(c)
-                print "HANG AFTER START?"
+#                print "HANG AFTER START?"
                 if ant_colony.best_path_cost < best_path_cost:
                     best_path_vec = ant_colony.best_path_vec
                     best_path_cost = ant_colony.best_path_cost
