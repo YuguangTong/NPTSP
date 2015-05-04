@@ -39,9 +39,6 @@ while cities:
     path.append(cur_city)
     cities.remove(cur_city)
 
-path.reverse()
-path = [0] + path
-
 wat = 0
 for i in range(len(path)-1):
     print path[i], '->', path[i+1], ':', distances[path[i]][path[i+1]]
