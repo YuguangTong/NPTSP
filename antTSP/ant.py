@@ -29,13 +29,14 @@ class Ant(Thread):
         for i in range(0, self.graph.num_nodes):
             if i != self.start_node:
                 self.nodes_to_visit[i] = i
-
+        print "hang?"
         # create n X n matrix 0'd out to start
         self.path_mat = []
 
         for i in range(0, self.graph.num_nodes):
             self.path_mat.append([0]*self.graph.num_nodes)
 
+        print "hang2?"
     # overide Thread's run()
     def run(self):
         graph = self.colony.graph
@@ -60,10 +61,12 @@ class Ant(Thread):
 
         # send our results to the colony
         self.colony.update(self)
-#        print "Ant thread %s terminating." % (self.ID,)
+        print "Ant thread %s terminating." % (self.ID,)
 
+        print "HANG3"
         # allows thread to be restarted (calls Thread.__init__)
         self.__init__(self.ID, self.start_node, self.colony, self.color)
+        print "HANG5??"
 
     def end(self):
         return not self.nodes_to_visit 
