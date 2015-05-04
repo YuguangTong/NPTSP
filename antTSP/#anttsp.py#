@@ -9,11 +9,11 @@ import traceback
 if __name__ == "__main__":   
 
 
-    num_ants = 1
-    num_iterations = 1
+    num_ants = 100
+    num_iterations = 100
     num_repetitions = 1
 
-    T = 495 # number of test cases
+    T = 1 # number of test cases
     fout = open ("answer.out", "w")
     for t in xrange(1, T+1):
         fin = open(str(t) + ".in", "r")
