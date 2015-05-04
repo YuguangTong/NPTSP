@@ -101,16 +101,22 @@ while q < dirk:
 
 del rondo[-1]
 
+print 'Dynamic Programming Algorithm'
+print '============================='
+
 wat = 0
 for i in range(len(rondo)-1):
-    print rondo[i], '->', rondo[i+1], ':', distances[rondo[i]][rondo[i+1]]
+    print rondo[i]+1, '->', rondo[i+1]+1, ':', distances[rondo[i]][rondo[i+1]]
     wat += distances[rondo[i]][rondo[i+1]]
 
 donda = []
 for r in rondo:
     donda.append(colors[r])
 
-print 'Dynamic Programming Algorithm'
+for t in range(len(rondo)):
+    rondo[t] += 1
+
+print '============================='
 print 'Order:', rondo
 print 'Colors:', donda
 print 'Length:', wat
