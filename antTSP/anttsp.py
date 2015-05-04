@@ -9,8 +9,8 @@ import traceback
 if __name__ == "__main__":   
 
 
-    num_ants = 5
-    num_iterations = 200
+    num_ants = 25
+    num_iterations = 25
     num_repetitions = 1
 
     T = 1 # number of test cases
