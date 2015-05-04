@@ -11,7 +11,7 @@ for t in range(1, T + 1):
     distMatr = [[] for i in range(numCity)]
     for i in range(numCity):
         distMatr[i] = [int(x) for x in fin.readline().split()]
-    colorList = fin.read()
+    colorList = fin.read().strip()
     fin.close()
     print numCity
     print colorList, "distrance matrix:"

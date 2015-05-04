@@ -21,7 +21,7 @@ if __name__ == "__main__":
         distMatr = [[] for i in range(numCity)]
         for i in range(numCity):
             distMatr[i] = [int(x) for x in fin.readline().split()]
-        colorList = fin.readline()
+        colorList = fin.readline().strip() #strip is necessary to remove space
         
         print '\n'
         print "working on " + str(t) + ".in.............................."
