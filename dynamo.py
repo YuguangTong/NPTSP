@@ -102,6 +102,8 @@ while q < dirk:
     cities.remove(prev)
     q += 1
 
+del rondo[-1]
+
 wat = 0
 for i in range(len(rondo)-1):
     print rondo[i], '->', rondo[i+1], ':', distances[rondo[i]][rondo[i+1]]
