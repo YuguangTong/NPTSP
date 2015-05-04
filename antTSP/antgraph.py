@@ -24,6 +24,8 @@ class AntGraph:
 
     # 1 / delta = eta or etha 
     def etha(self, r, s):
+        if self.delta(r, s) == 0:
+            return 1.1
         return 1.0 / self.delta(r, s)
 
     # inner locks most likely not necessary

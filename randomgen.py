@@ -1,5 +1,4 @@
 from random import randint
-import numpy as np
 import sys
 
 if len(sys.argv) != 3:
@@ -12,14 +11,14 @@ else:
     num_cities = int(sys.argv[1])
     filename = sys.argv[2]
     myFile = open(filename, 'w')
-    arr = np.zeros((num_cities, num_cities), int)
+    arr = [[0 for _ in range(num_cities)] for _ in range(num_cities)]
     redCounter = 0
     blueCounter = 0
     color = ''
     for i in range(num_cities):
         for j in range(i):
-            arr[i, j] = randint(0, 100)
-            arr[j, i] = arr[i, j]
+            arr[i][j] = randint(0, 100)
+            arr[j][i] = arr[i][j]
         if (randint(0, 1) == 0 and redCounter < num_cities/2) \
                 or blueCounter == num_cities/2:
             color +='R'
@@ -32,7 +31,7 @@ else:
     for i in range(num_cities):
         line = ''
         for j in range(num_cities):
-            line += str(arr[i, j]) + ' '
+            line += str(arr[i][j]) + ' '
         myFile.write(line + '\n')
     myFile.write(color + '\n')
     myFile.close()
