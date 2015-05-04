@@ -5,18 +5,15 @@ import pickle
 import sys
 import traceback
 
-#default
-num_nodes = 10
 
 if __name__ == "__main__":   
-    if len(sys.argv) > 1 and sys.argv[1]:
-        num_nodes = int(sys.argv[1])
 
-    num_ants = 30
-    num_iterations = 10
+
+    num_ants = 5
+    num_iterations = 200
     num_repetitions = 1
 
-    T = 1
+    T = 1 # number of test cases
     fout = open ("answer.out", "w")
     for t in xrange(1, T+1):
         fin = open(str(t) + ".in", "r")
@@ -26,39 +23,46 @@ if __name__ == "__main__":
             d[i] = [int(x) for x in fin.readline().split()]
         c = fin.readline()
 
-    cost_mat = d 
+        cost_mat = d 
 
-    print N
-    print d
-    print c
-
-
-    try:
-        graph = AntGraph(N, cost_mat)
-        best_path_vec = None
-        best_path_cost = sys.maxint
-        for i in range(0, num_repetitions):
-            graph.reset_tau()
-            ant_colony = AntColony(graph, num_ants, num_iterations, c)
-            ant_colony.start(c)
-            if ant_colony.best_path_cost < best_path_cost:
-                best_path_vec = ant_colony.best_path_vec
-                best_path_cost = ant_colony.best_path_cost
+        print "\n"
+        print "\n************************************************************"
+        print "\nTest # %s" % t 
+#        print d
+        print "\nSize of Input: %s" % N
 
 
-        best_path_vec = [x+1 for x in best_path_vec]
+        try:
+            graph = AntGraph(N, cost_mat)
+            best_path_vec = None
+            best_path_cost = sys.maxint
+            for i in range(0, num_repetitions):
+                graph.reset_tau()
+                ant_colony = AntColony(graph, num_ants, num_iterations, c)
+#                print "HANG AFTER ANYCOLONY"
 
-        print "\n------------------------------------------------------------"
-        print "                     Results                                "
-        print "------------------------------------------------------------"
-        print "\nBest path = %s" % (best_path_vec,)
-        print "\nBest path cost = %s\n" % (best_path_cost,)
-        for node in best_path_vec:
-            print c[node - 1] + " ",
-    
-        fout.write("%s\n" % " ".join(map(str, best_path_vec)))
-        fout.close()
+                ant_colony.start(c)
+#                print "HANG AFTER START?"
+                if ant_colony.best_path_cost < best_path_cost:
+                    best_path_vec = ant_colony.best_path_vec
+                    best_path_cost = ant_colony.best_path_cost
 
-    except Exception, e:
-        print "exception: " + str(e)
-        traceback.print_exc()
+
+            best_path_vec = [x+1 for x in best_path_vec]
+
+            print "\n------------------------------------------------------------"
+            print "                     Results                                "
+            print "------------------------------------------------------------"
+            print "\nBest path = %s" % (best_path_vec,)
+            print "\nBest path cost = %s\n" % (best_path_cost,)
+            for node in best_path_vec:
+                print c[node - 1] + " ",
+        
+            fout.write("%s\n" % " ".join(map(str, best_path_vec)))
+
+        except Exception, e:
+            print "exception: " + str(e)
+            traceback.print_exc()
+
+    fout.close()
+

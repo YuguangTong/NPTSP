@@ -2,7 +2,7 @@ from threading import Lock
 
 class AntGraph:
     def __init__(self, num_nodes, delta_mat, tau_mat=None):
-        print len(delta_mat)
+#        print len(delta_mat)
         if len(delta_mat) != num_nodes:
             raise Exception("len(delta) != num_nodes")
 

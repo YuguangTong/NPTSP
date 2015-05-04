@@ -24,15 +24,21 @@ class AntColony:
         self.last_best_path_iteration = 0
 
     def start(self, color):
+#        print "HANG HRERERE?"
+
         self.ants = self.create_ants(color)
         self.iter_counter = 0
 
+#        print "BEFORE WHILE"
         while self.iter_counter < self.num_iterations:
+#            print "WHILE WAITING FOR LOCKS"
             self.iteration()
 
             self.cv.acquire()
             # wait until update calls notify()
+#            print "THIS WAIT?"
             self.cv.wait()
+#            print "AHHH. THIS?"
 
             lock = self.graph.lock
             lock.acquire()
@@ -41,6 +47,7 @@ class AntColony:
 
             self.cv.release()
 
+#        print "DONE WITH START"
     # one iteration involves spawning a number of ant threads
     def iteration(self):
         self.avg_path_cost = 0
@@ -49,7 +56,9 @@ class AntColony:
 #        print "iter_counter = %s" % (self.iter_counter,)
         for ant in self.ants:
 #            print "starting ant = %s" % (ant.ID)
+#            print "ANT START"
             ant.start()
+#            print "ANT START ENDED"
 
     def num_ants(self):
         return len(self.ants)
@@ -97,7 +106,9 @@ class AntColony:
         self.reset()
         ants = []
         for i in range(0, self.num_ants):
+#            print "HANG6"
             ant = Ant(i, random.randint(0, self.graph.num_nodes - 1), self, color)
+#            print "HANG4"
             ants.append(ant)
         
         return ants

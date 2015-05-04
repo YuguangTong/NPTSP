@@ -17,38 +17,46 @@ def cci(city):
     else:
         return 1
 
-cur_city = 0
-cities = range(num_cities)
-cities.remove(0)
-path = [0]
-at = cci(cur_city)
-while cities:
-    top = float('inf')
-    bop = 0
-    for next_city in cities:
-        if at + cci(next_city) not in [-4, 4]: 
-            comparison = distances[cur_city][next_city]
-            if top > comparison:
-                top = comparison
-                bop = next_city
-    cur_city = bop
-    if at * cci(bop) > 0:
-        at += cci(bop)
-    else:
-        at = cci(bop)
-    path.append(cur_city)
-    cities.remove(cur_city)
+min_path_length = float('inf')
+min_path_order = []
 
-wat = 0
-for i in range(len(path)-1):
-    print path[i], '->', path[i+1], ':', distances[path[i]][path[i+1]]
-    wat += distances[path[i]][path[i+1]]
+for city in range(num_cities):
+    cur_city = city
+    cities = range(num_cities)
+    cities.remove(cur_city)
+    path = [cur_city]
+    at = cci(cur_city)
+    while cities:
+        top = float('inf')
+        bop = 0
+        for next_city in cities:
+            if at + cci(next_city) not in [-4, 4]: 
+                comparison = distances[cur_city][next_city]
+                if top > comparison:
+                    top = comparison
+                    bop = next_city
+        cur_city = bop
+        if at * cci(bop) > 0:
+            at += cci(bop)
+        else:
+            at = cci(bop)
+        path.append(cur_city)
+        cities.remove(cur_city)
+    wat = 0
+    for i in range(len(path)-1):
+        wat += distances[path[i]][path[i+1]]
+    if wat < min_path_length:
+        min_path_length = wat
+        min_path_order = path
+
+for i in range(len(min_path_order)-1):
+    print min_path_order[i], '->', min_path_order[i+1], ':', distances[min_path_order[i]][min_path_order[i+1]]
 
 donda = []
 for r in path:
     donda.append(colors[r])
 
 print 'Greedy Algorithm'
-print 'Order:', path
+print 'Order:', min_path_order
 print 'Colors:', donda
-print 'Length:', wat
+print 'Length:', min_path_length
