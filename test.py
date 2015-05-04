@@ -5,15 +5,16 @@ from antTSP.antgraph import AntGraph
 
 T = 1
 if __name__ == "__main__":
-    if len(sys.argv) == 2 and sys.argv[1]:
-        T = int(sys.argv[1])
+    if len(sys.argv) == 3 and sys.argv[2]:
+        T = int(sys.argv[2])
+        input_dir = sys.argv[1]
     else:
-        print("usage: python test.py [num_of_input_files]")
+        print("usage: python test.py [path_of_input_folder] [num_of_input_files]")
         sys.exit(1)
-    # assume that input is in directory ./testin/
+    # assume that input is in directory e.g. ./testin/
     # output answer to ./anwswer.out
     fout = open("answer.out", "w")
-    os.chdir(os.path.expanduser("./testin"))
+    os.chdir(os.path.expanduser(input_dir))
     for t in range(1, T + 1):
         fin = open(str(t) + ".in", "r")
         numCity = int(fin.readline())
@@ -29,18 +30,13 @@ if __name__ == "__main__":
 ## Nearest neighbor
 ###########################################
         g = nnGraph(distMatr, colorList, numCity)
-        tour1 = g.nn_best()[0]
-        assign1 = [c + 1 for c in tour1]
-        tour2 = g.nn_best_reversed()[0]
-        assign2 = [c + 1 for c in tour2]
-        fout.write("%s\n"% " ".join(map(str, assign2)))
+        tour = g.nn_best_reversed()[0]
+        assign = [c + 1 for c in tour]
+        fout.write("%s\n"% " ".join(map(str, assign)))
         print "-----------NN Result-------------"
-        print "without revsersal:", assign1
-        print "tour cost is", g.tour_cost(tour1)
-        print "color:", ''.join(g._colorList[i] for i in tour1)
-        print "without revsersal:", assign2
-        print "tour cost is", g.tour_cost(tour2)
-        print "color:",''.join(g._colorList[i] for i in tour2)
+        print "without revsersal:", assign
+        print "color:",''.join(g._colorList[i] for i in tour)
+        print "tour cost is", g.tour_cost(tour)
 ###########################################
 ## Ant colony
 ###########################################
