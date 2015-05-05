@@ -1,4 +1,4 @@
-T = 2 # number of test cases
+T = 1 # number of test cases
 for t in xrange(1, T+1):
     fin = open(str(t) + ".in", "r")
     N = int(fin.readline())
@@ -36,7 +36,7 @@ for city in range(num_cities):
                     top = comparison
                     bop = next_city
         cur_city = bop
-        if cur_city:
+        if cur_city != None:
             if at * cci(bop) > 0:
                 at += cci(bop)
             else:
@@ -48,6 +48,7 @@ for city in range(num_cities):
             cities = []
     if path == []:
         pass
+        print 'yo'
     else:
         wat = 0
         for i in range(len(path)-1):

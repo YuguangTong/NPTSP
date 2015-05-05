@@ -23,7 +23,6 @@ C={}
 cities = range(num_cities)
 for city in cities:
     C[(frozenset([city]), city, cci(city))] = 0
-
 s = 2
 while s <= num_cities:
     subsets = list(combinations(cities, s))
