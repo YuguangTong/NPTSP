@@ -91,7 +91,7 @@ def dp(num_cities, distances, colors):
         cities.remove(prev)
         q += 1
     
-    del rondo[-1]
+    #del rondo[-1]
 
     print 'Dynamic Programming Algorithm'
     print '============================='
@@ -112,6 +112,7 @@ def dp(num_cities, distances, colors):
     print 'Order:', rondo
     print 'Colors:', donda
     print 'Length:', wat
+    return rondo
 
 
 if __name__=="__main__":

@@ -11,6 +11,6 @@ for t in range(1, 496):
         print "instance #: ", t, "\t city #:", N
         small_count += 1
     fin.close()
-print "# instance whose size <=24: ", small_count
+print "# instance whose size <=20: ", small_count
     
 

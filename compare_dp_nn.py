@@ -9,11 +9,11 @@ if __name__ == "__main__":
         num_of_comparison = int(sys.argv[2])
         input_dir = sys.argv[1]
     else:
-        print("usage: python compare_dp_nn.py [instance_dir] [num_of_input_files]")
+        print("usage: python compare_dp_nn.py [instance_dir] [num_of_comparison")
         sys.exit(1)
     # assume that input is in directory e.g. ./testin/
     # output answer to ./anwswer.out
-    #fout = open("answer.out", "w")
+    fout = open("answer.out", "w")
     os.chdir(os.path.expanduser(input_dir))
     counter = 0
     for t in range(1, num_input+1):
@@ -38,19 +38,22 @@ if __name__ == "__main__":
 ## Nearest neighbor
 ###########################################
         g = nnGraph(distMatr, colorList, numCity)
-        tour = g.nn_best_reversed()[0]
-        assign = [c + 1 for c in tour]
-        #fout.write("%s\n"% " ".join(map(str, assign)))
+        nn_tour = g.nn_best_reversed()[0]
+        nn_assign = [c + 1 for c in nn_tour]
         print "-----------NN Result-------------"
-        print "without revsersal:", assign
-        print "color:",''.join(g._colorList[i] for i in tour)
-        print "tour cost is", g.tour_cost(tour)
+        print "without revsersal:", nn_assign
+        print "color:",''.join(g._colorList[i] for i in nn_tour)
+        print "tour cost is", g.tour_cost(nn_tour)
 ###########################################                                    
 ## Dynamic programming
 ########################################### 
         
-        dp(numCity, distMatr, colorList)
-
+        dp_assign = dp(numCity, distMatr, colorList)
+        dp_tour = [c - 1 for c in dp_assign]
+        if g.tour_cost(nn_tour) > g.tour_cost(dp_tour):
+            fout.write("%s\n"% " ".join(map(str, dp_assign)))
+        else:
+            fout.write("%s\n"% " ".join(map(str, nn_assign)))
 ###########################################
 ## Ant colony
 ###########################################
@@ -80,6 +83,6 @@ if __name__ == "__main__":
         except Exception as e:
             print "exception: ", str(e)
             traceback.print_exc()
+        """
     fout.close()
     os.chdir(os.path.expanduser("../"))
-    """
