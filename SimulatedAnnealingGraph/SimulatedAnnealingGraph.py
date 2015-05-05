@@ -1,5 +1,6 @@
 from random import randint 
 from math import exp 
+from nntsp import *
 
 
 class SimulatedAnnealingGraph(Object): 
@@ -17,6 +18,7 @@ class SimulatedAnnealingGraph(Object):
         self.bestTour = None
         self.bestScore = None
         self.currentScore = None
+        self.nnGraph = nnGraph(distMatrix, colorList, numCity)
         
 
     def visit_city(self, city): 
@@ -50,7 +52,7 @@ class SimulatedAnnealingGraph(Object):
 
         """Returns a random tour."""
 
-        pass
+        return 0
 
     def generate_probability(prevScore, nextScore, temperature): 
 
@@ -62,16 +64,22 @@ class SimulatedAnnealingGraph(Object):
         else: 
             return math.exp( -abs(next_score-prev_score)/temperature )
 
+
     def anneal(self, maxIterations, start_temp = self.temp, alpha = self.alpha): 
         
         """Returns a tour using simulated annealing."""
 
         numIterations = 0 
 
-        while numIterations < maxIterations:
-            pass
-
-        return None 
+        #take in a graph and run nnTSP on the graph 
+        theBest = self.nnGraph.nn_best()
+        if is_valid_tour(theBest): 
+            return theBest
+        else: 
+            print("Error: NN Tour is invalid") 
+            return None
+        
+        
 
     
     def kirkpatrick_cooling(start_temp,alpha):
