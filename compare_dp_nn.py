@@ -48,7 +48,7 @@ if __name__ == "__main__":
 ## Dynamic programming
 ########################################### 
         
-        dp_assign = dp(numCity, distMatr, colorList)
+        dp_assign = dp(numCity, distMatr, colorList, True)[0]
         dp_tour = [c - 1 for c in dp_assign]
         if g.tour_cost(nn_tour) > g.tour_cost(dp_tour):
             fout.write("%s\n"% " ".join(map(str, dp_assign)))
