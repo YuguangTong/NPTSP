@@ -48,7 +48,6 @@ for city in range(num_cities):
             cities = []
     if path == []:
         pass
-        print 'yo'
     else:
         wat = 0
         for i in range(len(path)-1):
