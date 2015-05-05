@@ -1,3 +1,4 @@
 .DS_Store
 antTSP/*.pyc
-nntTSP/*.pyc
+nnttsp/*.pyc
+dptsp/*.pyc

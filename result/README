@@ -1,0 +1,3 @@
+dp_answer.out: answer to all instances with N <= 20
+
+nn_answer.out: answer to all 475 instances
