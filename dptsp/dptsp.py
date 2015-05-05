@@ -1,12 +1,6 @@
 from itertools import combinations
 
-def cci(city):
-    if colors[city] == 'R':
-        return -1
-    else:
-        return 1
-
-def dp(num_cities, distances, colors):
+def dp(num_cities, distances, colors, print_path=False):
     def cci(city):
         if colors[city] == 'R':
             return -1
@@ -32,7 +26,8 @@ def dp(num_cities, distances, colors):
                 cur_color = cci(j)
                 for v in f_subset:
                     for i in [-3, -2, -1, 1, 2, 3]:
-                        if (f_subset, v, i) in C and cur_color + i not in [-4, 4]:
+                        if (f_subset, v, i) in C and \
+                           cur_color + i not in [-4, 4]:
                             comparison = C[(f_subset, v, i)] + distances[v][j]
                             if top > comparison:
                                 top = comparison
@@ -91,14 +86,14 @@ def dp(num_cities, distances, colors):
         cities.remove(prev)
         q += 1
     
-    #del rondo[-1]
-
-    print 'Dynamic Programming Algorithm'
-    print '============================='
+    if print_path:
+        print 'Dynamic Programming Algorithm'
+        print '============================='
 
     wat = 0
     for i in range(len(rondo)-1):
-        print rondo[i]+1, '->', rondo[i+1]+1, ':', distances[rondo[i]][rondo[i+1]]
+        if print_path: print rondo[i]+1, '->', rondo[i+1]+1, ':', \
+           distances[rondo[i]][rondo[i+1]]
         wat += distances[rondo[i]][rondo[i+1]]
 
     donda = []
@@ -108,11 +103,12 @@ def dp(num_cities, distances, colors):
     for t in range(len(rondo)):
         rondo[t] += 1
 
-    print '============================='
-    print 'Order:', rondo
-    print 'Colors:', donda
-    print 'Length:', wat
-    return rondo
+    if print_path:
+        print '============================='
+        print 'Order:', rondo
+        print 'Colors:', donda
+        print 'Length:', wat
+    return rondo, wat, donda
 
 
 if __name__=="__main__":

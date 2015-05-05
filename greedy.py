@@ -60,7 +60,8 @@ print 'Greedy Algorithm'
 print '================'
 
 for i in range(len(min_path_order)-1):
-    print min_path_order[i]+1, '->', min_path_order[i+1]+1, ':', distances[min_path_order[i]][min_path_order[i+1]]
+    print min_path_order[i]+1, '->', min_path_order[i+1]+1, ':', \
+          distances[min_path_order[i]][min_path_order[i+1]]
 
 donda = []
 for r in min_path_order:
@@ -69,7 +70,10 @@ for r in min_path_order:
 for t in range(len(min_path_order)):
     min_path_order[t] += 1
 
-print '================'
-print 'Order:', min_path_order
-print 'Colors:', donda
-print 'Length:', min_path_length
+if min_path_length != float('inf'):
+    print '================'
+    print 'Order:', min_path_order
+    print 'Colors:', donda
+    print 'Length:', min_path_length
+else:
+    print 'NO PATH FOUND'
