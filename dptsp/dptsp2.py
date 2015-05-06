@@ -1,13 +1,13 @@
 from itertools import combinations
 
-def dp(num_cities, distances, colors, print_path=False):
+def dp(num_cities, actual_size, distances, colors, print_path=False):
     def cci(city):
         if colors[city] == 'R':
             return -1
         else:
             return 1    
     C={}
-    cities = range(num_cities)
+    cities = actual_size
     for city in cities:
         C[(frozenset([city]), city, cci(city))] = 0
 
@@ -44,20 +44,27 @@ def dp(num_cities, distances, colors, print_path=False):
     roc = float('inf')
     next_color = None
     prev = None
-    for j in cities:
-        for i in [-3, -2, -1, 1, 2, 3]:
-            if (s_cities, j, i) in C:
-                comparison = C[(s_cities, j, i)]
-                if roc >= comparison:
-                    roc = comparison
-                    next_color = i
-                    prev = j
+    solutions = None
+    potentials = list(combinations(cities, num_cities))
+    for p in potentials:
+        list_p = list(p)
+        frozen_p = frozenset(list_p)
+        for j in frozen_p:
+            for i in [-3, -2, -1, 1, 2, 3]:
+                if (frozen_p, j, i) in C:
+                    comparison = C[(frozen_p, j, i)]
+                    if roc >= comparison:
+                        roc = comparison
+                        next_color = i
+                        prev = j
+                        solutions = list_p[:]
     rondo.append(prev)
-    cities.remove(prev)
-    dirk = num_cities-1 
+    relevant_cities = solutions[:]
+    relevant_cities.remove(prev)
+    dirk = num_cities-1
     q = 0
     while q < dirk:
-        s_cities = frozenset(cities)
+        s_cities = frozenset(relevant_cities)
         top = float('inf')
         nop = None
         cor = 0
@@ -72,7 +79,7 @@ def dp(num_cities, distances, colors, print_path=False):
             io = [3, 2, 1]
         else:
             print 'color error'
-        for j in cities:
+        for j in relevant_cities:
             for i in io: 
                 if (s_cities, j, i) in C:
                     if C[(s_cities, j, i)] + distances[j][prev] == roc:
@@ -83,19 +90,19 @@ def dp(num_cities, distances, colors, print_path=False):
         prev = vrep
         next_color = nop
         rondo.append(prev)
-        cities.remove(prev)
+        relevant_cities.remove(prev)
         q += 1
     
     if print_path:
         print 'Dynamic Programming Algorithm'
         print '============================='
-
+    
     wat = 0
     for i in range(len(rondo)-1):
         if print_path: print rondo[i]+1, '->', rondo[i+1]+1, ':', \
            distances[rondo[i]][rondo[i+1]]
         wat += distances[rondo[i]][rondo[i+1]]
-
+    
     donda = []
     for r in rondo:
         donda.append(colors[r])
@@ -123,5 +130,5 @@ if __name__=="__main__":
     num_cities = N
     distances = d
     colors = c
-    dp(N, d, c, True)
+    dp(N, d, c)
     
