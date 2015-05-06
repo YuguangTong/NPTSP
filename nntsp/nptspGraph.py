@@ -1,6 +1,11 @@
+from random import shuffle
+from itertools import combinations
+
 class nptspGraph(object):
     """
     Super class of any nptsp Graphs
+
+    A subclass would correspond to an algorithm. 
     """
     def __init__(self, distMatr, colorList, numCity):
         """
@@ -26,6 +31,7 @@ class nptspGraph(object):
         self.blueSet = frozenset(_bs)
         self.unvisitedRed = None
         self.unvisitedBlue = None
+        self._segments = None
 
     def tour_cost(self, tour):
         """
@@ -74,3 +80,46 @@ class nptspGraph(object):
                 prev = cur
                 count = 1
         return True
+
+    def random_alternating_tour(self):
+        """
+        Generate a random tour in the form of "RBRBRB..."
+        """
+        rlist = list(self.redSet)
+        blist = list(self.blueSet)
+        shuffle(rlist)
+        shuffle(blist)
+        tour = list(range(self.numCity))
+        tour[::2] = rlist
+        tour[1::2] = blist
+        return tour
+
+    @property
+    def all_segments(self):
+        """
+        return all (start, end) pairs that specify segments of tours.
+        """
+        if self._segments:
+            return self.segments
+        return [(start, start + length)
+                for length in range(2, self._numCity-2)
+                for start in range(1, self._numCity - length)]
+
+
+        
+    def random_tour(self):
+        """
+        Generate a completely (pseudo) random tour
+        """
+        while True:
+            tour = list(range(self.numCity))
+            shuffle(tour)
+            if self.is_valid_tour(tour):
+                return tour
+
+    def get_color(self, tour):
+        """
+        Return the color list of the TOUR
+        """
+        assert len(tour) == self.numCity
+        return [self.colorList[c] for c in tour]
