@@ -31,9 +31,9 @@ if __name__ == "__main__":
 ###### *** Make a SIMULATED ANNEALING GRAPH and run ANNEAL function. *** ####
 #############################################################################
         
-        maxIterations = 1000
-        cooling_factor = .995
-        startTemp = 100
+        maxIterations = 100
+        cooling_factor = .9995
+        startTemp = 110
         endTemp = .1
 
         instance = SimulatedAnnealingGraph(distMatr, colorList, numCity, maxIterations, cooling_factor, startTemp, endTemp)
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
         time_end = time.time()
 
-        print "distances_current--> " , distances_current
+        # print "distances_current--> " , distances_current
 
         print 'Result: ' + str(annealing_result)
         if instance.is_valid_tour(annealing_result):

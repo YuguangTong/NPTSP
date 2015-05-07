@@ -209,8 +209,7 @@ class SimulatedAnnealingGraph(object):
 
                     ### TESTING TO SEE IF THIS IS THE PROBLEM
                     # cities_new[cityA], cities_new[cityB] = cities_new[cityB], cities_new[cityA]
-                    swap_after = self.distance_swap(swap_before, cityA, cityB)
-
+                    swap_after = cities_new
                     """
                     print "Step: " , step
                     print "before: " , str(swap_before)
@@ -218,8 +217,6 @@ class SimulatedAnnealingGraph(object):
                     """
 
                     # and their costs
-                    swap_before_cost = self.tour_cost(swap_before)
-                    swap_after_cost = self.tour_cost(swap_after)
                     ### TEST ###
                     # print "Now, cities_current and cities_new should only differ in their indices, " + str(cityA) + ", " + str(cityB)
                     # print "cities_current / cost --> " , cities_current , " / " , self.tour_cost(cities_current)
@@ -227,34 +224,41 @@ class SimulatedAnnealingGraph(object):
 
                     # compute the distance of the swapped city list
                     # not exactly sure why these additions and subtractions work this way
-                    #distance_new = distance_new - swap_before_cost + swap_after_cost
-
+                    distance_new = self.tour_cost(swap_before)
+                    distance_current = self.tour_cost(swap_after)
+                    """
+                    print "What are distance new and distance current?"
+                    print "current: " , distance_current
+                    print "new: " , distance_new
+                    """
                     # Kirkpatrick acceptance probability
                     
-                    # diff = distance_new - distance_current
-
+                    diff = distance_new - distance_current
+                    """
                     current_cost = self.tour_cost(cities_current)
                     new_cost = self.tour_cost(swap_before)
 
                     diff = new_cost - current_cost
+                    """
 
                     # print "What is diff? --> " , diff
                     if diff < 0 or math.exp( -diff / temperature ) > random.randint(0,1):
                         # print "Does this ever execute?"
-                        cities_current = cities_new[:]
-                        cities_new = swap_after
+                        cities_current = swap_before
                         distance_current = distance_new
 
+                    """
                     else:
                         # no improvement and worsened result not within alpha
                         distance_new = distance_current
-                        cities_new = cities_current[:]
+                        cities_current = cities_current[:]
+                    """
 
                     # update the best known if solution is an improvement
                     # not for the annealing, but for restarts (in which we start
                     # with the best solution known)
                     if distance_current < currentBest_weight:
-                        citiesBest = cities_current[:]
+                        citiesBest = cities_current
                         currentBest_weight = distance_current
 
                     # decrease temperature by alpha, increment step counter
@@ -270,7 +274,7 @@ class SimulatedAnnealingGraph(object):
             print "Interrupted on user demand"
             print "performed iterations: " + str(iteration)
             print "current best tour: " + str(citiesBest)
-            print "cost of current best tour: " + (currentBest_weight)
+            print "cost of current best tour: " + str(currentBest_weight)
 
         
         return citiesBest, distances_current, distances_best, starting_weight
