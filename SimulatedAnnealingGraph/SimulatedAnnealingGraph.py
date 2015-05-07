@@ -1,13 +1,15 @@
-from random import randint 
-from math import exp 
-from nntsp import *
+import random
+import math 
+from nngraph import nnGraph
+import sys, os
+import time
 
 
-class SimulatedAnnealingGraph(Object): 
+class SimulatedAnnealingGraph(object): 
 
     """Creates a graph object for finding a tour using simulated annealing!"""
 
-    def __init__(self, distMatrix, colorList, numCity, cooling_factor=.995, startTemp=100, endTemp=.1): 
+    def __init__(self, distMatrix, colorList, numCity, iterations, cooling_factor=.995, startTemp=100, endTemp=.1): 
         
         # conditions for the input values
         assert 0 < cooling_factor < 1, "Cooling factor (alpha) must be a float in (0, 1) --> " + cooling_factor
@@ -15,7 +17,7 @@ class SimulatedAnnealingGraph(Object):
         assert startTemp > endTemp, "The starting temperature must be greater than the ending temperature"
 
         # check number of cities and input matrix are same length
-        assert len(distMatrix) = numCity, "Size of the input matrix must match the njumber of cities. \
+        assert len(distMatrix) == numCity, "Size of the input matrix must match the njumber of cities. \
         cities: " + numCity + ", length of input: " + len(distMatrix) 
         
         self.cities = distMatrix
@@ -23,13 +25,18 @@ class SimulatedAnnealingGraph(Object):
         self.numcities = numCity
         self.redSet = set()
         self.blueSet = set()
-        self.startTemp = startTemp
-        self.endTemp = endTemp
+        for c in range(self.numcities):
+            if colorList[c] == 'R':
+                self.redSet.add(c)
+            else:
+                self.blueSet.add(c)
+        self.start_temp = startTemp
+        self.end_temp = endTemp
         self.alpha = cooling_factor
         self.bestTour = None
         self.bestScore = None
         self.nnGraph = nnGraph(distMatrix, colorList, numCity)
-        
+        self.maxIterations = iterations
 
     def visit_city(self, city): 
         if (city in redSet) or (city in blueSet): 
@@ -42,15 +49,12 @@ class SimulatedAnnealingGraph(Object):
 
 
     def tour_cost(self, tour): 
-        assert len(tour) = self.numcities
+        assert len(tour) == self.numcities
         cost = 0
-        for i in range (self.numcities):
+        for i in range(self.numcities-1):
             cost += self.cities[tour[i]][tour[i+1]]
+            # print "What is i -->" + str(i)
         return cost
-
-    
-
-
 
     def is_valid_tour(self, tour): 
 
@@ -59,8 +63,8 @@ class SimulatedAnnealingGraph(Object):
 
         count = 0
         prev = 'X'
-        for k in range(self._numCity):
-            cur = self._colorList[tour[k]]
+        for k in range(self.numcities):
+            cur = self.colorList[tour[k]]
             if cur == prev:
                 count += 1
                 if count > 3:
@@ -69,7 +73,6 @@ class SimulatedAnnealingGraph(Object):
                 prev = cur
                 count = 1
         return True
-
 
     def select_random_tour(self): #May or may not be useful
 
@@ -84,14 +87,12 @@ class SimulatedAnnealingGraph(Object):
         for i in range (self.numcities):
             if red: 
                 x = (random.randint(0,1) * (len(reds) - 1) ) // 1
-                print("x: ", x)
                 city = reds[x]
                 reds.remove(city)
                 tour.append(city)
                 red = False
             else: 
                 x = (random.randint(0,1) * (len(blues) - 1)) // 1
-                print("x: ", x)
                 city = blues[x]
                 blues.remove(city)
                 tour.append(city)
@@ -115,27 +116,27 @@ class SimulatedAnnealingGraph(Object):
         else: 
             return math.exp( -abs(next_score-prev_score)/temperature )
 
-    def distance_swap(list_of_cities, index_a, index_b):
+    def distance_swap(self, list_of_cities, index_a, index_b):
         
         """
         Takes a list of cities in output form and two indices, and returns the list with
         cities swapped. 
 
         """
+        newList = list_of_cities[:]
         swapThis = list_of_cities[index_a]
-        list_of_cities[index_a] = list_of_cities[index_b]
-        list_of cities[index_b] = swapThis
-        return list_of_cities
+        newList[index_a] = list_of_cities[index_b]
+        newList[index_b] = swapThis
+        return newList
     
 
-    def anneal(self, maxIterations, start_temp = self.startTemp, end_temp = self.endTemp, alpha = self.alpha): 
+    def anneal(self): 
         
         """
         Returns a tour using simulated annealing.
 
-        @param: maxIterations --> the number of interations in the restart process
-        @param: start_temp --> 
-
+        Assumes a correct input graph.
+      
         """
 
         # starting from a random path may be more effective, because it could
@@ -155,35 +156,41 @@ class SimulatedAnnealingGraph(Object):
             return None
 
         """
+
         citiesBest = self.select_random_tour()
+        # print "What is the length of citiesBest? --> " + str(len(citiesBest))
         currentBest_weight = self.tour_cost(citiesBest)
+        starting_weight = currentBest_weight
         
         distances_current = []
         distances_best = []
-        ids_iteration = []
 
         try:
-            for iteration in range(maxIterations):
+            for iteration in range(self.maxIterations):
                 # search is restarted at every iteration from the best known solution
-                temperature = start_temp
+                temperature = self.start_temp
                 cities_current = citiesBest
+                cities_new = citiesBest
                 distance_current = currentBest_weight
                 distance_new = currentBest_weight
-                cities_new = citiesBest
+                
                 ### TEST ###
-                print "Initialized parameters:"
-                print "starting temperature --> " + temperature
-                print "input list of cities (should be a list of indices 0-49) -->"
-                    + str(cities_current)
-                print "weight of the tour above --> " + distance_current 
+                # print "Initialized parameters: "
+                # print "starting temperature --> " , temperature
+                """
+                print "iteration #" , iteration
+                print "input list of cities (should be a list of indices 0-49) -->" + str(cities_current)
+                print "weight of the tour above --> " , distance_current 
+                """
 
                 step = 0
-                while temperature > end_temp:
+                while temperature > self.end_temp:
                     # computing indices of the two cities to swap
                     # never move the first city (??)
-                    index = random.sample(self.numcities-1, 2)
+                    index = random.sample(xrange(self.numcities-1), 2)
+                    # print "indices: " , index
                     ### TEST ###
-                    print "These are the indices of cities to be swapped " + str(index)
+                    # print "These are the indices of cities to be swapped " + str(index)
                     # why this? not sure that we need it
                     # index[0] += 1
                     # index[1] += 1
@@ -194,31 +201,48 @@ class SimulatedAnnealingGraph(Object):
                     # optimize by recomputing only the changed distances
                     
                     # creating a new list of the swapped cities
-                    swap_before = distance_swap(cities_new, cityA, cityB)
+                    swap_before = self.distance_swap(cities_new, cityA, cityB)
                     # ensure that this swap creates a valid path, otherwise start over
                     if self.is_valid_tour(swap_before) == False:
+                        # print "Does this part actually run?"
                         continue
 
-                    cities_new[cityA], cities_new[cityB] = cities_new[cityB], cities_new[cityA]
-                    swap_after = distance_swap(cities_new, cityA, cityB)
+                    ### TESTING TO SEE IF THIS IS THE PROBLEM
+                    # cities_new[cityA], cities_new[cityB] = cities_new[cityB], cities_new[cityA]
+                    swap_after = self.distance_swap(swap_before, cityA, cityB)
+
+                    """
+                    print "Step: " , step
+                    print "before: " , str(swap_before)
+                    print "after: " , str(swap_after)
+                    """
 
                     # and their costs
-                    swap_before_cost = tour_cost(swap_before)
-                    swap_after_cost = tour_cost(swap_after)
+                    swap_before_cost = self.tour_cost(swap_before)
+                    swap_after_cost = self.tour_cost(swap_after)
                     ### TEST ###
-                    print "Now, cities_current and cities_new should only differ in their indices, "
-                        + cityA + ", " + cityB
-                    print "cities_current / cost --> " + cities_current + " / " + self.tour_cost(cities_current)
-                    print "cities_new / cost -->" + cities_new + " / " + self.tour_cost(cities_new)
+                    # print "Now, cities_current and cities_new should only differ in their indices, " + str(cityA) + ", " + str(cityB)
+                    # print "cities_current / cost --> " , cities_current , " / " , self.tour_cost(cities_current)
+                    # print "cities_new / cost -->" , cities_new , " / " , self.tour_cost(cities_new)
 
                     # compute the distance of the swapped city list
                     # not exactly sure why these additions and subtractions work this way
-                    distance_new = distance_new - swap_before_cost + swap_after_cost
+                    #distance_new = distance_new - swap_before_cost + swap_after_cost
 
                     # Kirkpatrick acceptance probability
-                    diff = distance_new - distance_current
-                    if diff < 0 or math.exp( -diff / temperature ) > random.random():
+                    
+                    # diff = distance_new - distance_current
+
+                    current_cost = self.tour_cost(cities_current)
+                    new_cost = self.tour_cost(swap_before)
+
+                    diff = new_cost - current_cost
+
+                    # print "What is diff? --> " , diff
+                    if diff < 0 or math.exp( -diff / temperature ) > random.randint(0,1):
+                        # print "Does this ever execute?"
                         cities_current = cities_new[:]
+                        cities_new = swap_after
                         distance_current = distance_new
 
                     else:
@@ -234,24 +258,34 @@ class SimulatedAnnealingGraph(Object):
                         currentBest_weight = distance_current
 
                     # decrease temperature by alpha, increment step counter
-                    if True:
-                        distances_current.append(distance_current)
-                        distances_best.append(distance_best)
-                    temperature = temperature * alpha
+                    distances_current.append(distance_current)
+                    distances_best.append(currentBest_weight)
+                    temperature = temperature * self.alpha
                     step += 1
 
-                ids_iteration.append(len(distances_current))
+                self.bestScore = currentBest_weight
+                self.bestTour = citiesBest
 
         except KeyboardInterrupt, e:
             print "Interrupted on user demand"
-            print "performed iterations: " + iteration
-            print "current best tour: " + citiesBest
-            print "cost of current best tour: " + currentBest_weight
+            print "performed iterations: " + str(iteration)
+            print "current best tour: " + str(citiesBest)
+            print "cost of current best tour: " + (currentBest_weight)
 
-        self.bestScore = currentBest_weight
-        self.bestTour = citiesBest
         
-        return citiesBest, distances_current, distances_best, ids_iteration     
+        return citiesBest, distances_current, distances_best, starting_weight
+
+    def display_usage():
+        print 'usage: performs simulated annealing global metaheurisitic on input XXX.in'
+        print '@input a standard NPTSP instance with the .in extension'
+        print '@output an NPTSP solution with .out extension'
+        print '@param distMatrix: a symmetric 2-dimensional list values 0 <= x <= 100'
+        print '@param colorList: a strong of Rs and Bs in order representing the indices of the distMatrix'
+        print '@param numCities: the number of indices in the distMatrix'
+
+
+
+
 
 
 

@@ -1,6 +1,7 @@
 import os, sys, traceback
-from nngraph import *
+from nngraph import nnGraph
 from SimulatedAnnealingGraph import * 
+import random
 
 T = 1
 if __name__ == "__main__":
@@ -30,16 +31,34 @@ if __name__ == "__main__":
 ###### *** Make a SIMULATED ANNEALING GRAPH and run ANNEAL function. *** ####
 #############################################################################
         
-        maxIterations = 40
-        saGraph = SimulatedAnnealingGraph(distMatr, colorList, numCity)
-        print("Running simulated annealing on ", numCity, " by ", numCity, 
-              "matrix.") 
-        print("......................................................")
-        saTour = saGraph.anneal(maxIterations) #run saTour with maxIterations
-        tour, cost = saTour[0], saTour[1]
-        print("Tour result: ", tour) #print result of calling anneal
-        print("Tour cost: ", cost)
-        print("Color list:",''.join(saGraph.colorList[i] for i in tour))
+        maxIterations = 1000
+        cooling_factor = .995
+        startTemp = 100
+        endTemp = .1
+
+        instance = SimulatedAnnealingGraph(distMatr, colorList, numCity, maxIterations, cooling_factor, startTemp, endTemp)
+
+        seed = time.time()
+        random.seed(seed)
+
+        time_begin = time.time()
+
+        print 'Starting simulated annealing on ' + str(t) + '.in, CTRL+C to interrupt...'
+
+        (annealing_result, distances_current, distances_best, starting_weight) = instance.anneal()
+
+        time_end = time.time()
+
+        print "distances_current--> " , distances_current
+
+        print 'Result: ' + str(annealing_result)
+        if instance.is_valid_tour(annealing_result):
+            print "This tour is valid."
+        print 'Result cost:             %8.0f'     % instance.tour_cost(annealing_result)
+        print 'Improvement:             %8.0f %%'  % (100 * (starting_weight - instance.bestScore) / starting_weight)
+        print 'Time:                    %8.0f sec' % (time_end - time_begin)
+        print 'Initial cost:            %8.0f'     % starting_weight
+        
         
 
 
