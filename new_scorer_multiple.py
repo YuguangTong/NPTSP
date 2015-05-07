@@ -6,7 +6,7 @@ import os
   
 def main(argv):
 
-  fanswer = open(os.path.expanduser(answer_dir) + "answer2.out", "r")
+  fanswer = open(os.path.expanduser(answer_dir) + "answer.out", "r")
   fout = open("score.txt", "w")
   for i in xrange(ninstances):
     finstance = open(os.path.expanduser(input_dir) + `i+1`+".in", "r")
