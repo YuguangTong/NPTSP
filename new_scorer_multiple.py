@@ -8,8 +8,8 @@ def main(argv):
 
   fanswer = open(os.path.expanduser(answer_dir) + "answer.out", "r")
   fout = open("score.txt", "w")
-  for i in xrange(ninstances):
-    finstance = open(os.path.expanduser(input_dir) + `i+1`+".in", "r")
+  for i in range(ninstances):
+    finstance = open(os.path.expanduser(input_dir) + `i+start_instance`+".in", "r")
     N = int(finstance.readline())
     d = [[] for i in range(N)]
     for i in xrange(N):
@@ -58,19 +58,20 @@ ninstances = 495 # default
 answer_dir = "./"
 
 if __name__ == '__main__':
-  if len(sys.argv) < 3:
-    print("usage: python scorer_multiple.py [path_of_instance_dir][num_of_input_files] (optional)[answer_dir]")
+  if len(sys.argv) < 4:
+    print("usage: python scorer_multiple.py [path_of_instance_dir] [start_inst_num] [num_of_input_files] (optional)[answer_dir]")
     sys.exit(0)
     
   if not os.path.exists(sys.argv[1]):
     print sys.argv[1], "is not a valid path for instances"
-  ninstances = int(sys.argv[2])
+  start_instance = int(sys.argv[2])
+  ninstances = int(sys.argv[3])
   input_dir = sys.argv[1]
   if ninstances < 1 or ninstances > 495:
     print "file number should be between 1 and 495 inclusive"
     sys.exit(0)
-  if len(sys.argv) == 4:
-    answer_dir =  sys.argv[3]
+  if len(sys.argv) == 5:
+    answer_dir =  sys.argv[4]
     if not os.path.exists(answer_dir):
       print sys.argv[3], "is not a valid path for answers.out"
       sys.exit(0)

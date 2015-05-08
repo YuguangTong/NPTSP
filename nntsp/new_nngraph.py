@@ -2,6 +2,7 @@ from random import randint
 from copy import copy
 import sys
 from nptspGraph import nptspGraph
+from itertools import combinations
 
 class nnGraph(nptspGraph):
     """
@@ -18,6 +19,7 @@ class nnGraph(nptspGraph):
 
         """
         nptspGraph.__init__(self, distMatr, colorList, numCity)
+        self._swap_combinations = None 
 
     def alternate_color(self, curCity):
         """
@@ -70,6 +72,56 @@ class nnGraph(nptspGraph):
                 curTour, curCost = newTour, newCost
         return curTour, curCost
 
+    def nn_best_reversed_swapped(self):
+        """
+        Return the shortest path tweaking from nearest-neighbor tour
+        using both secton reversal and city swapping.
+        """
+        curTour, curCost = [], sys.maxsize
+        for c in range(self.numCity):
+            newTour = self.new_alter_tour(self.nn_tour(c))
+            newCost = self.tour_cost(newTour)
+            if newCost < curCost:
+                curTour, curCost = newTour, newCost
+        return curTour, curCost
+        
+
+    def swap_if_better(self, tour, i, j):
+        """
+        Swap two cities in a tour
+        """
+        new_tour = tour[:]
+        temp, new_tour[i] = tour[i], tour[j]
+        new_tour[j] = temp
+        if not self.is_valid_tour(new_tour):
+            return
+        if self.tour_cost(new_tour) < self.tour_cost(tour):
+            temp, tour[i] = tour[i], tour[j]
+            tour[j] = temp
+        return
+
+    @property
+    def swap_combinations(self):
+        if not self._swap_combinations:
+            self._swap_combinations = list(combinations(range(self.numCity - 1), 2))
+        return self._swap_combinations
+
+    def improve_by_swap(self, tour):
+        """
+        try to improve a tour by swap two cities.
+        """
+        for (i, j) in self.swap_combinations:
+            self.swap_if_better(tour, i, j)
+        return tour
+
+    def improve_by_reversal(self, tour):
+        """
+        try to improve a tour by section reversal.
+        """
+        for (i, j) in self.all_segments:
+            self.reverse_segment_if_better(tour, i, j)
+        return tour
+        
     def hill_climbing(self, n):
         """                                                                     
         Use hill climbing strategy with on N random tours
@@ -77,7 +129,7 @@ class nnGraph(nptspGraph):
 
         curTour, curCost = [], sys.maxsize
         for _ in range(n):
-            newTour = self.alter_tour(self.random_tour())
+            newTour = self.new_alter_tour(self.random_alternating_tour())
             newCost = self.tour_cost(newTour)
             if newCost < curCost:
                 curTour, curCost = newTour, newCost
@@ -99,24 +151,34 @@ class nnGraph(nptspGraph):
                 self.distMatr[a][c] + self.distMatr[b][d]:
             tour[i:j] = reversed(tour[i:j])
 
-    def check_reversed_tour_1(self, tour, i, j):
-        """
-        Naive implementation to check if TOUR is still valid
-        after tour[i:j] is reversed. May not be efficient enough.
-        """
-        new_tour = copy(tour)
-        new_tour[i:j] = reversed(new_tour[i:j])
-        return self.is_valid_tour(new_tour)
-
-    def alter_tour(self, tour):
+    def alter_tour(self, tour, method = 'reverse'):
         """
         
         """
         originalCost = self.tour_cost(tour)
-        for (start, end) in self.all_segments:
-            self.reverse_segment_if_better(tour, start, end)
-        if self.tour_cost(tour) < originalCost:
-            return self.alter_tour(tour)
-        return tour
+        if method == 'reverse':
+            for (start, end) in self.all_segments:
+                self.reverse_segment_if_better(tour, start, end)
+            if self.tour_cost(tour) < originalCost:
+                return self.alter_tour(tour, 'reverse')
+            return tour
+        if method == 'swap':
+            for (i, j) in self.swap_combinations:
+                self.swap_if_better(tour, i, j)
+            if self.tour_cost(tour) < originalCost:
+                return self.alter_tour(tour, 'swap')
+            return tour
 
+    def new_alter_tour(self, tour):
+        """
+        check both section reversal and city swapping
+        """
+        originalCost = self.tour_cost(tour)
+        for (i, j) in self.all_segments:
+            self.reverse_segment_if_better(tour, i, j)
+        for (i, j) in self.swap_combinations:
+            self.swap_if_better(tour, i, j)
+        if self.tour_cost(tour) < originalCost:
+            return self.new_alter_tour(tour)
+        return tour
     
