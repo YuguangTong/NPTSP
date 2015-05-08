@@ -6,7 +6,7 @@ import os
   
 def main(argv):
 
-  fanswer = open(os.path.expanduser(answer_dir) + "answer.out", "r")
+  fanswer = open(os.path.expanduser(answer_file), "r")
   fout = open("score.txt", "w")
   for i in range(ninstances):
     finstance = open(os.path.expanduser(input_dir) + `i+start_instance`+".in", "r")
@@ -55,7 +55,7 @@ def processCase(N, d, c, perm):
   return str(cost)
 
 ninstances = 495 # default                                                     
-answer_dir = "./"
+answer_file = "./answer.out"
 
 if __name__ == '__main__':
   if len(sys.argv) < 4:
@@ -71,8 +71,8 @@ if __name__ == '__main__':
     print "file number should be between 1 and 495 inclusive"
     sys.exit(0)
   if len(sys.argv) == 5:
-    answer_dir =  sys.argv[4]
-    if not os.path.exists(answer_dir):
-      print sys.argv[3], "is not a valid path for answers.out"
+    answer_file =  sys.argv[4]
+    if not os.path.exists(answer_file):
+      print sys.argv[3], "is not a valid path for answer file"
       sys.exit(0)
   main(sys.argv[1:])
