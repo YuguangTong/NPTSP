@@ -15,7 +15,7 @@ if __name__ == "__main__":
     # output answer to ./anwswer.out
     fout = open("answer.out", "w")
     os.chdir(os.path.expanduser(input_dir))
-    for t in range(10, T + 1):
+    for t in range(1, T + 1):
         fin = open(str(t) + ".in", "r")
         numCity = int(fin.readline())
         distMatr = [[] for i in range(numCity)]
