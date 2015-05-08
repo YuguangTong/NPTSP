@@ -15,7 +15,7 @@ if __name__ == "__main__":
     # output answer to ./anwswer.out
     fout = open("answer.out", "w")
     os.chdir(os.path.expanduser(input_dir))
-    for t in range(1, T + 1):
+    for t in range(301, T + 301):
         fin = open(str(t) + ".in", "r")
         numCity = int(fin.readline())
         distMatr = [[] for i in range(numCity)]
@@ -37,7 +37,7 @@ if __name__ == "__main__":
         cooling_factor = .995
         startTemp = 120
         endTemp = .1
-        anneal_calls = 10
+        anneal_calls = 20
 
         solution_cities = []
         solution_weight = 5000
@@ -63,12 +63,12 @@ if __name__ == "__main__":
         print 'Result: ' + str(solution_cities)
         if instance.is_valid_tour(solution_cities):
             print "This tour is valid."
-        """
+
         # write to answer.out
-        tour = annealing_result
+        tour = solution_cities
         assign = [c + 1 for c in tour]
         fout.write("%s\n"% " ".join(map(str, assign)))
-        """
+
         print 'Result cost:             %8.0f'     % solution_weight
         print 'Time:                    %8.0f sec' % (time_end - time_begin)
         print 'Initial cost:            %8.0f'     % instance.tour_cost(nn_tour)
