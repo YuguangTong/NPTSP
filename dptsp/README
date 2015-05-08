@@ -1,0 +1,33 @@
+There are three variations to the dynamic programming algorithm:
+
+    1. dptsp.py - The original dynamic programming algorithm modified to satisfy
+                  the color invariant of the NPTSP. dptsp.py takes all of the
+                  cities within an instance and finds the shortest path within
+                  them. 
+
+    2. dptsp2.py - A variation of the original dynamic programming algorithm
+                   that is primarily used by split_dptsp.py. dptsp2.py takes any
+                   group of cities and find the shortest path within them, which
+                   is useful for splitting up a large problem into smaller
+                   parts.
+
+    3. split_dpstp.py - A variation of the dynamic programming algorithm that
+                        uses dptsp2 to incrementally solve an instance with a
+                        large number of cities in groups of 20 cities.
+
+Each of these files can be called from the command line with arguments or as a
+function within another python file. Each function takes four arguments:
+
+    1. num_cities - The number of cities in the instance.
+
+    2. distances - A 2D array of the distances between each city.
+
+    3. colors - An array of colors for each city in the instance.
+
+    4. print_path - An argument that defaults to False, and if set to true will
+                    print each iteration of the algorithm for the user to view.
+
+To use each file at the command line, type:
+    
+    >>> python [filename] [instance location]
+    
