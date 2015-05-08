@@ -128,6 +128,12 @@ class SimulatedAnnealingGraph(object):
         newList[index_a] = list_of_cities[index_b]
         newList[index_b] = swapThis
         return newList
+
+    def reverse_cities(self, tour, index_a, index_b):
+
+        newList=tour[:]
+        newList[index_a:index_b] = reversed(newList[index_a:index_b])
+        return newList
     
 
     def anneal(self): 
@@ -156,8 +162,9 @@ class SimulatedAnnealingGraph(object):
             return None
 
         """
-
-        citiesBest = self.select_random_tour()
+        # naive solution to start
+        naive = nnGraph(self.cities, self.colorList, self.numcities)
+        citiesBest = naive.nn_best_reversed()[0]
         # print "What is the length of citiesBest? --> " + str(len(citiesBest))
         currentBest_weight = self.tour_cost(citiesBest)
         starting_weight = currentBest_weight
@@ -200,12 +207,19 @@ class SimulatedAnnealingGraph(object):
 
                     # optimize by recomputing only the changed distances
                     
+                    ha = random.randint(0,1)
+
                     # creating a new list of the swapped cities
-                    swap_before = self.distance_swap(cities_new, cityA, cityB)
-                    # ensure that this swap creates a valid path, otherwise start over
-                    if self.is_valid_tour(swap_before) == False:
+                    if (ha > .2):
+                        swap_before = self.distance_swap(cities_new, cityA, cityB)
+                        # ensure that this swap creates a valid path, otherwise start over
+                        if self.is_valid_tour(swap_before) == False:
                         # print "Does this part actually run?"
-                        continue
+                            continue
+                    else:
+                        swap_before = self.reverse_cities(cities_new, cityA, cityB)
+                        if self.is_valid_tour(swap_before) == False:
+                            continue
 
                     ### TESTING TO SEE IF THIS IS THE PROBLEM
                     # cities_new[cityA], cities_new[cityB] = cities_new[cityB], cities_new[cityA]
@@ -286,19 +300,3 @@ class SimulatedAnnealingGraph(object):
         print '@param distMatrix: a symmetric 2-dimensional list values 0 <= x <= 100'
         print '@param colorList: a strong of Rs and Bs in order representing the indices of the distMatrix'
         print '@param numCities: the number of indices in the distMatrix'
-
-
-
-
-
-
-
-
-
-        
-        
-        
-
-    
-
-    
