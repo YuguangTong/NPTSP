@@ -1,4 +1,4 @@
-import random
+nealimport random
 import math 
 from nngraph import nnGraph
 import sys, os

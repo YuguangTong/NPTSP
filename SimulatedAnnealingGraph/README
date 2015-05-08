@@ -1,0 +1,12 @@
+miscellaneous
+
+1, nnstp is a python2 package to solve NPTSP using nearest neighbor algorihtm.
+
+The only source file is "nntsp/nngraph.py".
+You can delete other files (apart from "__init__.py") to maintain package structure.
+
+2, "run.py" contain some example on how to use nntsp package (and other, e.g. antTSP)
+   e.g. python run.py instances/ 10
+
+3, "new_scorer_multiple.py" now takes in command line argument to specify how many instances to check score and where the instances are.
+   e.g. python new_scorer_multiple.py instances/ 495 ./
