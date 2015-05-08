@@ -15,7 +15,7 @@ if __name__ == "__main__":
     # output answer to ./anwswer.out
     fout = open("answer.out", "w")
     os.chdir(os.path.expanduser(input_dir))
-    for t in range(301, T + 301):
+    for t in range(101, 201):
         fin = open(str(t) + ".in", "r")
         numCity = int(fin.readline())
         distMatr = [[] for i in range(numCity)]
@@ -59,7 +59,6 @@ if __name__ == "__main__":
                 solution_weight = case_cost
 
         time_end = time.time()
-
         print 'Result: ' + str(solution_cities)
         if instance.is_valid_tour(solution_cities):
             print "This tour is valid."
