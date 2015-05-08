@@ -24,7 +24,10 @@ if __name__ == "__main__":
         if numCity <= 20:
             counter += 1
         else:
+            random_assign = [c+1 for c in range(numCity)]
+            fout.write("%s\n"% " ".join(map(str, random_assign)))
             continue
+
         distMatr = [[] for i in range(numCity)]
         for i in range(numCity):
             distMatr[i] = [int(x) for x in fin.readline().split()]
