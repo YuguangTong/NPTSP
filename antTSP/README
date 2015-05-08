@@ -1,22 +1,19 @@
-Python Ant Colony TSP Solver
------------------------------
+Our first attempt at solving this problem was to rely on existing code
+that people have already written and make modifications to it. 
 
-Uses Ant Colony Optimization to solve the TSP.  See http://en.wikipedia.org/wiki/Ant_colony_optimization_algorithms 
+The original code is here: https://github.com/trevlovett/Python-Ant-Colony-TSP-Solver
 
-anttsp.py is the file to run.  It reads from citiesAndDistances.pickled, which is a pickled 2D array with this format:
-CityName1  CityName2 ... CitNameN
-0           23               34         
-10           0               22
-.
-.
-.
+The code is organized into three classes: ant, antcolony, and antgraph.
+Where antgraph defines the graph, also with methods such as finding the
+distances between any two nodes. The antcolony contains values for ant
+deposition, evaporation, and assigns ants to random starts. The ant class
+contains methods that finds the next path for the ants to take. 
 
-It is not necessary for the matrix to be symmetric i.e. the distance traveling from A to B need not be the distance from B to A  (if you have ever been to Italy and dealt with the mess of one-way streets you will understand how this applies).
+One major problem that we encounted in the process of modification was 
+the use of threading and locking in the original code. We failed to 
+modify the code as it got us into many deadlocks and many threading 
+exceptions that eventually, we decided our time is best spent on
+writting new algorithms.
 
-Run without additional arguments, it solves the 10-city TSP
-
-You can also try this:
-python anttsp.py 14
-
-Other values <= 14 tested as well
-
+To run the code, simply do:
+python anttsp.py
