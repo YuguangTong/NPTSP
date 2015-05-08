@@ -48,9 +48,9 @@ class nptspGraph(object):
         Initialization before a tour search by set up
         unvisitedRed and unvisitedBlue.
         """
-        self.unvisitedRed, self.unvistedBlue = set(self.redSet), set(self.blueSet)
+        self.unvisitedRed, self.unvisitedBlue = set(self.redSet), set(self.blueSet)
 
-    def visit_city(city):
+    def visit_city(self, city):
         """
         In contruction of a tour:
         remove a red(blue) CITY from unvisitedRed (unvisitedBlue)
@@ -58,7 +58,7 @@ class nptspGraph(object):
         if city not in self.unvisitedRed and \
                 city not in self.unvisitedBlue:
             raise Exception('Error: Invalid city to visit')
-        if color == 'R':
+        if self.colorList[city] == 'R':
             self.unvisitedRed.remove(city)
         else:
             self.unvisitedBlue.remove(city)
@@ -102,8 +102,8 @@ class nptspGraph(object):
         if self._segments:
             return self.segments
         return [(start, start + length)
-                for length in range(2, self._numCity-2)
-                for start in range(1, self._numCity - length)]
+                for length in range(2, self.numCity-2)
+                for start in range(1, self.numCity - length)]
 
 
         
