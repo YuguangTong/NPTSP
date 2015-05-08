@@ -45,7 +45,7 @@ if __name__ == "__main__":
 ##########################################
 ## Hill climbing
 ##########################################
-        tour, cost = g.hill_climbing(500)
+        tour, cost = g.hill_climbing(2000)
         print "---Hill climbing-------------"
         assign = [c+1 for c in tour]
         #print "color:", g.get_color(tour)
