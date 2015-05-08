@@ -15,7 +15,7 @@ if __name__ == "__main__":
     # output answer to ./anwswer.out
     fout = open("answer.out", "w")
     os.chdir(os.path.expanduser(input_dir))
-    for t in range(1, T + 1):
+    for t in range(10, T + 1):
         fin = open(str(t) + ".in", "r")
         numCity = int(fin.readline())
         distMatr = [[] for i in range(numCity)]
@@ -30,13 +30,17 @@ if __name__ == "__main__":
 #############################################################################
 ###### *** Make a SIMULATED ANNEALING GRAPH and run ANNEAL function. *** ####
 #############################################################################
-        
-        maxIterations = 100
-        cooling_factor = .9995
-        startTemp = 110
-        endTemp = .1
+        nn_input = nnGraph(distMatr, colorList, numCity)
+        nn_tour = nn_input.nn_best_reversed()[0]
 
-        instance = SimulatedAnnealingGraph(distMatr, colorList, numCity, maxIterations, cooling_factor, startTemp, endTemp)
+        maxIterations = 50
+        cooling_factor = .995
+        startTemp = 120
+        endTemp = .1
+        anneal_calls = 10
+
+        solution_cities = []
+        solution_weight = 5000
 
         seed = time.time()
         random.seed(seed)
@@ -45,20 +49,29 @@ if __name__ == "__main__":
 
         print 'Starting simulated annealing on ' + str(t) + '.in, CTRL+C to interrupt...'
 
-        (annealing_result, distances_current, distances_best, starting_weight) = instance.anneal()
+        for call in range(anneal_calls):
+            instance = SimulatedAnnealingGraph(distMatr, colorList, numCity, maxIterations, cooling_factor, startTemp, endTemp)
+            (annealing_result, distances_current, distances_best, starting_weight) = instance.anneal()
+            case_cities = annealing_result
+            case_cost = instance.tour_cost(annealing_result)
+            if case_cost < solution_weight:
+                solution_cities = case_cities
+                solution_weight = case_cost
 
         time_end = time.time()
 
-        # print "distances_current--> " , distances_current
-
-        print 'Result: ' + str(annealing_result)
-        if instance.is_valid_tour(annealing_result):
+        print 'Result: ' + str(solution_cities)
+        if instance.is_valid_tour(solution_cities):
             print "This tour is valid."
-        print 'Result cost:             %8.0f'     % instance.tour_cost(annealing_result)
-        print 'Improvement:             %8.0f %%'  % (100 * (starting_weight - instance.bestScore) / starting_weight)
+        """
+        # write to answer.out
+        tour = annealing_result
+        assign = [c + 1 for c in tour]
+        fout.write("%s\n"% " ".join(map(str, assign)))
+        """
+        print 'Result cost:             %8.0f'     % solution_weight
         print 'Time:                    %8.0f sec' % (time_end - time_begin)
-        print 'Initial cost:            %8.0f'     % starting_weight
-        
+        print 'Initial cost:            %8.0f'     % instance.tour_cost(nn_tour)
         
 
 
