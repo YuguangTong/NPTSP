@@ -12,9 +12,15 @@ for t in xrange(0,T):
 	r1 = first_answer_in.readline()
 	r2 = second_answer_in.readline()
 
-	if int(c1) > int(c2):
-		finalans.write(r2)
-	else:
-		finalans.write(r1)
+	if int(c1) > int(c2): 
+		if int(c2) == -1:  # if invalid, write the other one.
+			finalans.write(r1)
+		else: #c2 is valid and lower, write r2
+			finalans.write(r2)
+	else:  # c2 > c1
+		if int(c1) == -1: # if invalid, write the other one
+			finalans.write(r2)
+		else: #c1 is valid and lower, write r1
+			finalans.write(r1)
 
 
