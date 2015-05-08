@@ -1,0 +1,30 @@
+nnGraph provides a class nnGraph, which contain methods
+to find paths. 
+
+algorithm:
+1, nnGraph use nearest-neighbor heuristics to construct a
+path with alternating colors.
+2, improve the previous path by section-reversal operation.
+
+example usage:
+from nntsp import nnGraph
+# assume some lines to read instances
+d = .. (distant matrix)
+N = .. (number of cities)
+c = .. (color of cities)
+# create a graph
+g = nnGraph(c, d, N)
+tour, cost = g.nn_best_reversed()
+assign = [c+1 for c in tour]
+
+# assign gives a path
+# cost gives its cost
+
+
+=======================================
+new_nnGraph provides an improved version of nnGraph class.
+Two improvements are made:
+1, add swap operations aside from section-reversal operation
+2, relax the initial path to be random. 
+
+See ../run.py for example usage.
