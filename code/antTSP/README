@@ -1,0 +1,19 @@
+Our first attempt at solving this problem was to rely on existing code
+that people have already written and make modifications to it. 
+
+The original code is here: https://github.com/trevlovett/Python-Ant-Colony-TSP-Solver
+
+The code is organized into three classes: ant, antcolony, and antgraph.
+Where antgraph defines the graph, also with methods such as finding the
+distances between any two nodes. The antcolony contains values for ant
+deposition, evaporation, and assigns ants to random starts. The ant class
+contains methods that finds the next path for the ants to take. 
+
+One major problem that we encounted in the process of modification was 
+the use of threading and locking in the original code. We failed to 
+modify the code as it got us into many deadlocks and many threading 
+exceptions that eventually, we decided our time is best spent on
+writting new algorithms.
+
+To run the code, simply do:
+python anttsp.py
